@@ -901,6 +901,7 @@ def build_chromadb(list_files: List[str]) -> Chroma:
     return db
 
 
+@st.cache_resource
 def load_vector_db(path_to_vectordb: str) -> Chroma:
     embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
     loaded_db = Chroma(persist_directory=path_to_vectordb, embedding_function=embedding_function)
