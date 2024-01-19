@@ -39,9 +39,64 @@ db = build_chromadb(list_files=file_names)
 # Set the title of the Streamlit web page to "Echo Bot".
 st.title("Echo Bot")
 
+
+# Sidebars
+with st.sidebar:
+    with st.expander("Instruction Manual 📖"):
+        st.markdown(
+            r"""
+            # Exenatide Chatbot User Manual 🤖💊
+
+            Welcome to the Exenatide Chatbot, your go-to assistant for all information about the proprietary drug "Exenatide." This easy-to-use chatbot is designed to provide quick, reliable answers to your questions about Exenatide. Follow these simple steps to start chatting!
+
+            ## Getting Started 🚀
+
+            1. **Access the Chatbot**: Open the Exenatide Chatbot application on your preferred device.
+
+            2. **Start Chatting**: Simply type your question about Exenatide into the chat window. It could be anything from dosage information to side effects or general inquiries about the drug.
+
+            3. **Send Your Question**: Press the 'Send' button or hit 'Enter' to submit your question to the chatbot.
+
+            ## Chatting with Exenatide Chatbot 🤔💬
+
+            - **Ask Anything**: Whether it’s detailed drug composition, usage guidelines, storage instructions, or safety precautions, feel free to ask. Example: "What is the recommended dosage of Exenatide for adults?"
+
+            - **Use Simple Language**: For best results, use clear and concise questions. The chatbot is designed to understand everyday language.
+
+            - **Wait for the Response**: Once you submit your question, the chatbot will process it and provide an answer shortly.
+
+            - **Follow-Up Questions**: You can ask follow-up questions or new questions at any time. Just type them into the chat window and send.
+
+            ## Tips for a Better Experience ✨
+
+            - **Be Specific**: The more specific your question, the more accurate the chatbot's response will be.
+
+            - **Check for Typing Errors**: Ensure your question is free from typos to help the chatbot understand you better.
+
+            - **Emoji Use**: Feel free to use emojis in your questions! The chatbot is emoji-friendly. 😊
+
+            - **Patience is Key**: If the chatbot takes a moment to respond, don't worry. It's just processing the best possible answer for you!
+
+            ## Support and Feedback 🤝
+
+            - **Experiencing Issues?**: If you face any issues or have technical difficulties, please contact our support team.
+
+            - **We Value Your Feedback**: After using the Exenatide Chatbot, we would love to hear your thoughts. Your feedback helps us improve!
+
+            Thank you for using the Exenatide Chatbot! We hope it helps you find all the information you need about Exenatide quickly and easily. Happy chatting! 🎉💬
+            """
+        )
+clear_button = st.sidebar.button("Clear Conversation", key="clear")
+
+
 # Initialize the chat history in the Streamlit session state if it doesn't already exist.
 # The session state persists across reruns of the app, enabling continuity in the chat.
 if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Clear the chat history in the Streamlit session state if it gets long or messy.
+# The session state persists across reruns of the app, enabling continuity in the chat.
+if clear_button:
     st.session_state.messages = []
 
 # Display each message in the chat history.
@@ -73,7 +128,7 @@ if prompt := st.chat_input("What is up?"):
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
         st.markdown(response)
-        st.write("### Reference")
+        st.write("#### Reference")
         st.write(references)
     # Add the assistant's response to the chat history in the session state.
     st.session_state.messages.append({"role": "assistant", "content": response})
