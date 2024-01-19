@@ -23,7 +23,7 @@ openai_client = openai.OpenAI()
 # involving 'Exenatide', which might be a drug or a medical treatment.
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
-db = load_vector_db("vectorstore")
+db = load_vector_db("./vectorstore")
 
 
 # Set the title of the Streamlit web page to "Drug Search🤖💊".
@@ -117,6 +117,8 @@ if prompt := st.chat_input("What is up?"):
     docs = db.similarity_search(query)
     retrieved_documents = " ".join([docs[i].page_content for i in range(len(docs))])
     response = rag(query=query, retrieved_documents=retrieved_documents)
+
+    # Create reference table
     references = pd.DataFrame(
         [[docs[i].metadata["source"], docs[i].page_content] for i in range(len(docs))]
     )
@@ -128,5 +130,6 @@ if prompt := st.chat_input("What is up?"):
         st.markdown(response)
         st.write("#### Reference")
         st.write(references)
+        st.write(docs[0])
     # Add the assistant's response to the chat history in the session state.
     st.session_state.messages.append({"role": "assistant", "content": response})
