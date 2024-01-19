@@ -4,7 +4,7 @@ import PyPDF2
 
 
 def read_and_textify(
-    files: List[st.uploaded_file_manager.UploadedFile],
+    files: List[str],
 ) -> Tuple[List[str], List[str]]:
     """
     Reads PDF files and extracts text from each page.
