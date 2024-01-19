@@ -115,17 +115,13 @@ if prompt := st.chat_input("What is up?"):
     response = f"Drug Search🤖💊: {prompt}"
     query = f"User origin question:{prompt}"
     docs = db.similarity_search(query)
-    top_n = 2
-    if top_n > len(docs):
-        top_n = len(docs)
-    else:
-        top_n = 2
-    retrieved_documents = " ".join([docs[i].page_content for i in range(top_n)])
+    retrieved_documents = " ".join([docs[i].page_content for i in range(len(docs))])
     response = rag(query=query, retrieved_documents=retrieved_documents)
     references = pd.DataFrame(
-        [[docs[i].metadata["source"], docs[i].page_content] for i in range(top_n)]
+        [[docs[i].metadata["source"], docs[i].page_content] for i in range(len(docs))]
     )
-    references.columns = ["Source", "Excerpt"]
+    if references.shape[1] >= 2:
+        references.columns = ["Source", "Excerpt"]
 
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
