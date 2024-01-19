@@ -21,11 +21,10 @@ openai_client = openai.OpenAI()
 # Define a list of file names. These files contain data that will likely be used for processing.
 # The path suggests that these are text files related to different phases of a study or project
 # involving 'Exenatide', which might be a drug or a medical treatment.
-file_names = get_all_files_names()
-
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
-db = build_chromadb(list_files=file_names)
+db = load_vector_db("vectorstore")
+
 
 # Set the title of the Streamlit web page to "Drug Search🤖💊".
 st.title("Drug Search🤖💊")
@@ -73,6 +72,14 @@ with st.sidebar:
             - **Experiencing Issues?**: If you face any issues or have technical difficulties, please contact our support team.
 
             - **We Value Your Feedback**: After using the Exenatide Chatbot, we would love to hear your thoughts. Your feedback helps us improve!
+
+            ## The Team Behind the App 🧑‍💻👩‍💻
+
+            The Exenatide Chatbot is proudly founded by Peter Yin and Yiqiao Yin. Their dedication and expertise have been instrumental in bringing this innovative solution to life.
+
+            - **Peter Yin**: Get to know more about Peter and his professional journey on [LinkedIn](https://www.linkedin.com/in/peter-yin-7914ba25/).
+
+            - **Yiqiao Yin**: Discover more about Yiqiao's background and accomplishments on [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/).
 
             Thank you for using the Exenatide Chatbot! We hope it helps you find all the information you need about Exenatide quickly and easily. Happy chatting! 🎉💬
             """

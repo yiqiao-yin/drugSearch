@@ -901,6 +901,12 @@ def build_chromadb(list_files: List[str]) -> Chroma:
     return db
 
 
+def load_vector_db(path_to_vectordb: str) -> Chroma:
+    embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
+    loaded_db = Chroma(persist_directory=path_to_vectordb, embedding_function=embedding_function)
+    return loaded_db
+
+
 def rag(
     query: str, retrieved_documents: List[str], model: str = "gpt-3.5-turbo"
 ) -> str:
