@@ -91,14 +91,13 @@ elif uploaded_files:
     retriever.search_kwargs = {"k": 2}  # Set the number of documents to retrieve
 
     # Initialize the language model with the specified model name and API key
-    openai_client = OpenAI(
-        model_name=model_name,
-        openai_api_key=st.secrets["OPENAI_API_KEY"],
-        streaming=True,
+    client = OpenAI(
+        # This is the default and can be omitted
+        api_key=os.environ.get("OPENAI_API_KEY"),
     )
 
     # Define foundation model via OpenAI API call
-    chat_completion = openai_client.chat.completions.create(
+    chat_completion = client.chat.completions.create(
         messages=[
             {
                 "role": "user",
