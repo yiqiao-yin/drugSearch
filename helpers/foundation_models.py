@@ -18,7 +18,8 @@ openai_client = openai.OpenAI()
 
 
 # Files names
-file_names = [
+def get_all_files_names():
+    return [
     'data/txt/Exenatide Phase 1.1_0.txt',
     'data/txt/Exenatide Phase 1.1_1.txt',
     'data/txt/Exenatide Phase 1.1_2.txt',

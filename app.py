@@ -18,6 +18,11 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 openai_client = openai.OpenAI()
 
 
+# Define a list of file names. These files contain data that will likely be used for processing.
+# The path suggests that these are text files related to different phases of a study or project
+# involving 'Exenatide', which might be a drug or a medical treatment.
+file_names = get_all_files_names()
+
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
 db = build_chromadb(list_files=file_names)
