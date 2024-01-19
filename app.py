@@ -116,6 +116,10 @@ if prompt := st.chat_input("What is up?"):
     query = f"User origin question:{prompt}"
     docs = db.similarity_search(query)
     top_n = 2
+    if top_n > len(docs):
+        top_n = len(docs)
+    else:
+        top_n = 2
     retrieved_documents = " ".join([docs[i].page_content for i in range(top_n)])
     response = rag(query=query, retrieved_documents=retrieved_documents)
     references = pd.DataFrame(
