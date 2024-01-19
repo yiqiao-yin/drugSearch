@@ -18,26 +18,12 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 openai_client = openai.OpenAI()
 
 
-# Define a list of file names. These files contain data that will likely be used for processing.
-# The path suggests that these are text files related to different phases of a study or project
-# involving 'Exenatide', which might be a drug or a medical treatment.
-file_names = [
-    "data/txt/Exenatide Phase 1.1_0.txt",
-    "data/txt/Exenatide Phase 1.1_1.txt",
-    "data/txt/Exenatide Phase 1.1_2.txt",
-    "data/txt/Exenatide Phase 1.2_0.txt",
-    "data/txt/Exenatide Phase 1.2_1.txt",
-    "data/txt/Exenatide Phase 1.2_2.txt",
-    "data/txt/Exenatide Phase 1.1_3.txt",
-    "data/txt/Exenatide Phase 1.2_3.txt",
-]
-
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
 db = build_chromadb(list_files=file_names)
 
-# Set the title of the Streamlit web page to "Echo Bot".
-st.title("Echo Bot")
+# Set the title of the Streamlit web page to "Drug Search🤖💊".
+st.title("Drug Search🤖💊")
 
 
 # Sidebars
