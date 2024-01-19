@@ -114,7 +114,7 @@ if prompt := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Create a response string that echoes the user's input.
-    response = f"Echo: {prompt}"
+    response = f"Drug Search🤖💊: {prompt}"
     query = f"User origin question:{prompt}"
     docs = db.similarity_search(query)
     top_n = 2
