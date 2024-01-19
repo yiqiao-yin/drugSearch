@@ -1,4 +1,5 @@
 import openai
+import pandas as pd
 import streamlit as st
 from langchain.document_loaders import TextLoader
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
@@ -61,11 +62,16 @@ if prompt := st.chat_input("What is up?"):
     response = f"Echo: {prompt}"
     query = f"User origin question:{prompt}"
     docs = db.similarity_search(query)
-    retrieved_documents = " ".join([docs[i].page_content for i in range(2)])
+    top_n = 2
+    retrieved_documents = " ".join([docs[i].page_content for i in range(top_n)])
     response = rag(query=query, retrieved_documents=retrieved_documents)
+    references = pd.DataFrame(
+        [[docs[i].metadata["source"], docs[i].page_content] for i in range(top_n)]
+    )
 
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
         st.markdown(response)
     # Add the assistant's response to the chat history in the session state.
     st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append({"role": "assistant", "content": references})
