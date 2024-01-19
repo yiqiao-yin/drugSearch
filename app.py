@@ -93,7 +93,7 @@ elif uploaded_files:
     # Initialize the language model with the specified model name and API key
     llm = OpenAI(
         model_name=model_name,
-        openai_api_key=st.secrets["openai_api_key"],
+        openai_api_key=st.secrets["OPENAI_API_KEY"],
         streaming=True,
     )
 
