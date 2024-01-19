@@ -64,9 +64,6 @@ with st.sidebar:
     # Clear button
     clear_button = st.sidebar.button("Clear Conversation", key="clear")
 
-    # A separator line for visual clarity in the sidebar
-    st.write("---")
-
 
 # Initialize chat history
 if "messages" not in st.session_state:
