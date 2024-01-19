@@ -110,7 +110,7 @@ elif uploaded_files:
 
     # Set up a retriever using the Chroma Vector Store
     retriever = vStore.as_retriever()
-    retriever.search_kwargs = {"k": 10}  # Set the number of documents to retrieve
+    retriever.search_kwargs = {"k": 1}  # Set the number of documents to retrieve
 
     # Initialize the language model with the specified model name and API key
     openai.api_key = st.secrets["OPENAI_API_KEY"]
