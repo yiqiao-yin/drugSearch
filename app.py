@@ -91,15 +91,26 @@ elif uploaded_files:
     retriever.search_kwargs = {"k": 2}  # Set the number of documents to retrieve
 
     # Initialize the language model with the specified model name and API key
-    llm = OpenAI(
+    openai_client = OpenAI(
         model_name=model_name,
         openai_api_key=st.secrets["OPENAI_API_KEY"],
         streaming=True,
     )
 
+    # Define foundation model via OpenAI API call
+    chat_completion = openai_client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": "Say this is a test",
+            }
+        ],
+        model="gpt-3.5-turbo",
+    )
+
     # Set up a retrieval-qa chain using the language model and retriever
     model = RetrievalQAWithSourcesChain.from_chain_type(
-        llm=llm, chain_type="stuff", retriever=retriever
+        llm=chat_completion, chain_type="stuff", retriever=retriever
     )
 
     # User interface to ask questions
