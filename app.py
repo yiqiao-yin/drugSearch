@@ -93,7 +93,7 @@ elif uploaded_files:
     # Initialize the language model with the specified model name and API key
     client = OpenAI(
         # This is the default and can be omitted
-        api_key=os.environ.get("OPENAI_API_KEY"),
+        api_key=st.secrets["OPENAI_API_KEY"],
     )
 
     # Define foundation model via OpenAI API call
