@@ -58,12 +58,21 @@ with st.sidebar:
     uploaded_files = st.file_uploader(
         "Upload documents", accept_multiple_files=True, type=["txt", "pdf"]
     )
+
+    # Clear button
+    clear_button = st.sidebar.button("Clear Conversation", key="clear")
+
     # A separator line for visual clarity in the sidebar
     st.write("---")
 
 
 # Initialize chat history
 if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+
+# Reset everything
+if clear_button:
     st.session_state.messages = []
 
 
@@ -79,7 +88,7 @@ if uploaded_files is None:
     st.info("Upload files to analyze")
 elif uploaded_files:
     # Inform the user how many documents have been loaded
-    st.write(f"{len(uploaded_files)} document(s) loaded..")
+    st.sidebar.write(f"{len(uploaded_files)} document(s) loaded..")
 
     # Process the uploaded files to extract text and source information
     textify_output = read_and_textify(uploaded_files)
@@ -113,8 +122,8 @@ elif uploaded_files:
     )
 
     # User interface to ask questions
-    st.header("Ask your data")
-    user_q = st.text_area("Enter your questions here")
+    # st.header("Ask your data")
+    # user_q = st.text_area("Enter your questions here")
 
     # Button to get the response from the model
     # if st.button("Get Response"):
