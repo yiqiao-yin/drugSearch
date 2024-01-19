@@ -1,19 +1,20 @@
 import langchain
-import PyPDF2
 import openai
-from openai import OpenAI
+import PyPDF2
 import streamlit as st
 from langchain import OpenAI, VectorDBQA
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
+from openai import OpenAI
 
 from helpers.foundation_models import *
 
 st.set_page_config(layout="centered", page_title="Drug Search🤖💊")
 st.header("Drug Search🤖💊")
 st.write("---")
+
 
 # Streamlit sidebar setup for user interface
 with st.sidebar:
@@ -62,9 +63,6 @@ with st.sidebar:
     # Clear button
     clear_button = st.sidebar.button("Clear Conversation", key="clear")
 
-    # A separator line for visual clarity in the sidebar
-    st.write("---")
-
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -86,6 +84,8 @@ for message in st.session_state.messages:
 if uploaded_files is None:
     # Display a message prompting the user to upload files
     st.info("Upload files to analyze")
+
+
 elif uploaded_files:
     # Inform the user how many documents have been loaded
     st.sidebar.write(f"{len(uploaded_files)} document(s) loaded..")
@@ -110,7 +110,7 @@ elif uploaded_files:
 
     # Set up a retriever using the Chroma Vector Store
     retriever = vStore.as_retriever()
-    retriever.search_kwargs = {"k": 1}  # Set the number of documents to retrieve
+    retriever.search_kwargs = {"k": 10}  # Set the number of documents to retrieve
 
     # Initialize the language model with the specified model name and API key
     openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -120,28 +120,6 @@ elif uploaded_files:
     model = RetrievalQAWithSourcesChain.from_chain_type(
         llm=openai_client, chain_type="stuff", retriever=retriever
     )
-
-    # User interface to ask questions
-    # st.header("Ask your data")
-    # user_q = st.text_area("Enter your questions here")
-
-    # Button to get the response from the model
-    # if st.button("Get Response"):
-    #     try:
-    #         # Display a spinner while the model is processing the question
-    #         with st.spinner("Model is working on it..."):
-    #             # Get the response from the model
-    #             result = model({"question": user_q}, return_only_outputs=True)
-    #             st.subheader("Your response:")
-    #             st.write(result["answer"])  # Display the answer
-    #             st.subheader("Source pages:")
-    #             st.write(result["sources"])  # Display the source pages
-    #     except Exception as e:
-    #         # Handle exceptions by displaying an error message
-    #         st.error(f"An error occurred: {e}")
-    #         st.error(
-    #             "Oops, the GPT response resulted in an error :( Please try again with a different question."
-    #         )
 
     # React to user input
     if prompt := st.chat_input("What is up?"):
