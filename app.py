@@ -62,6 +62,17 @@ with st.sidebar:
     st.write("---")
 
 
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+
 # Check if any files have been uploaded
 if uploaded_files is None:
     # Display a message prompting the user to upload files
@@ -106,19 +117,35 @@ elif uploaded_files:
     user_q = st.text_area("Enter your questions here")
 
     # Button to get the response from the model
-    if st.button("Get Response"):
-        try:
-            # Display a spinner while the model is processing the question
-            with st.spinner("Model is working on it..."):
-                # Get the response from the model
-                result = model({"question": user_q}, return_only_outputs=True)
-                st.subheader("Your response:")
-                st.write(result["answer"])  # Display the answer
-                st.subheader("Source pages:")
-                st.write(result["sources"])  # Display the source pages
-        except Exception as e:
-            # Handle exceptions by displaying an error message
-            st.error(f"An error occurred: {e}")
-            st.error(
-                "Oops, the GPT response resulted in an error :( Please try again with a different question."
-            )
+    # if st.button("Get Response"):
+    #     try:
+    #         # Display a spinner while the model is processing the question
+    #         with st.spinner("Model is working on it..."):
+    #             # Get the response from the model
+    #             result = model({"question": user_q}, return_only_outputs=True)
+    #             st.subheader("Your response:")
+    #             st.write(result["answer"])  # Display the answer
+    #             st.subheader("Source pages:")
+    #             st.write(result["sources"])  # Display the source pages
+    #     except Exception as e:
+    #         # Handle exceptions by displaying an error message
+    #         st.error(f"An error occurred: {e}")
+    #         st.error(
+    #             "Oops, the GPT response resulted in an error :( Please try again with a different question."
+    #         )
+
+    # React to user input
+    if prompt := st.chat_input("What is up?"):
+        # Display user message in chat message container
+        st.chat_message("user").markdown(prompt)
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+
+        result = model({"question": prompt}, return_only_outputs=True)
+        response = result["answer"]
+        # Display assistant response in chat message container
+        with st.chat_message("assistant"):
+            st.markdown(response)
+            st.write(result["sources"])
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": response})
