@@ -1,15 +1,16 @@
 import langchain
-import openai
 import PyPDF2
+import openai
+from openai import OpenAI
 import streamlit as st
 from langchain import OpenAI, VectorDBQA
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from openai import OpenAI
 
 from helpers.foundation_models import *
+
 
 st.set_page_config(layout="centered", page_title="Drug Search🤖💊")
 st.header("Drug Search🤖💊")
@@ -63,6 +64,9 @@ with st.sidebar:
     # Clear button
     clear_button = st.sidebar.button("Clear Conversation", key="clear")
 
+    # A separator line for visual clarity in the sidebar
+    st.write("---")
+
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -90,36 +94,45 @@ elif uploaded_files:
     # Inform the user how many documents have been loaded
     st.sidebar.write(f"{len(uploaded_files)} document(s) loaded..")
 
+
     # Process the uploaded files to extract text and source information
     textify_output = read_and_textify(uploaded_files)
+
 
     # Separate the output into documents (text) and their corresponding sources
     documents, sources = textify_output
 
+
     # Initialize OpenAI embeddings with the API key from Streamlit secrets
     embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
+
 
     # Create a Chroma Vector Store with metadata. This store will include page numbers as metadata.
     vStore = Chroma.from_texts(
         documents, embeddings, metadatas=[{"source": s} for s in sources]
     )
 
+
     # Define the model to use for the language model, here 'gpt-3.5-turbo'
     model_name = "gpt-3.5-turbo"
     # Alternative model: model_name = "gpt-4"
+
 
     # Set up a retriever using the Chroma Vector Store
     retriever = vStore.as_retriever()
     retriever.search_kwargs = {"k": 1}  # Set the number of documents to retrieve
 
+
     # Initialize the language model with the specified model name and API key
     openai.api_key = st.secrets["OPENAI_API_KEY"]
     openai_client = OpenAI()
+
 
     # Set up a retrieval-qa chain using the language model and retriever
     model = RetrievalQAWithSourcesChain.from_chain_type(
         llm=openai_client, chain_type="stuff", retriever=retriever
     )
+
 
     # React to user input
     if prompt := st.chat_input("What is up?"):
