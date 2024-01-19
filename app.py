@@ -73,6 +73,7 @@ if prompt := st.chat_input("What is up?"):
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
         st.markdown(response)
+        st.write("### Reference")
         st.write(references)
     # Add the assistant's response to the chat history in the session state.
     st.session_state.messages.append({"role": "assistant", "content": response})
