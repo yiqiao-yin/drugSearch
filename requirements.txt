@@ -2,3 +2,4 @@ chromadb==0.3.29
 langchain==0.0.343
 streamlit
 sentence-transformers==2.2.2
+openai
