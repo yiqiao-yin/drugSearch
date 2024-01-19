@@ -46,7 +46,7 @@ with st.sidebar:
             - **Share Your Feedback**: Your input is valuable and helps us improve.
 
             ## The Team Behind the App 🧑‍💻👩‍💻
-            - **Founders**: Learn about Peter Yin and Yiqiao Yin, the founders, on LinkedIn.
+            - **Founders**: Learn about [Peter Yin](https://www.linkedin.com/in/peter-yin-7914ba25/) and [Yiqiao Yin](https://www.linkedin.com/in/yiqiaoyin/), the founders, on LinkedIn.
 
             Thank you for choosing the Exenatide Chatbot. We're here to provide all the information you need about Exenatide efficiently. Happy chatting! 🎉💬
             """
