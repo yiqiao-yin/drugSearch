@@ -14,116 +14,112 @@ st.set_page_config(layout="centered", page_title="Drug Search🤖💊")
 st.header("Drug Search🤖💊")
 st.write("---")
 
-# file uploader
+# Streamlit sidebar setup for user interface
 with st.sidebar:
+    # Create an expandable instruction manual section in the sidebar
     with st.expander("Instruction Manual 📖"):
+        # Display the instruction manual for the Exenatide Chatbot in a formatted markdown
         st.markdown(
             """
             # Exenatide Chatbot User Manual 🤖💊
-
-            Welcome to the Exenatide Chatbot, your go-to assistant for all information about the proprietary drug "Exenatide." This easy-to-use chatbot is designed to provide quick, reliable answers to your questions about Exenatide. Follow these simple steps to start chatting!
+            
+            Welcome to the Exenatide Chatbot, your interactive assistant for information on the drug "Exenatide". This chatbot offers quick and accurate responses to your queries. Follow these steps to interact with the chatbot:
 
             ## Getting Started 🚀
-
-            1. **Access the Chatbot**: Open the Exenatide Chatbot application on your preferred device.
-
-            2. **Start Chatting**: Simply type your question about Exenatide into the chat window. It could be anything from dosage information to side effects or general inquiries about the drug.
-
-            3. **Send Your Question**: Press the 'Send' button or hit 'Enter' to submit your question to the chatbot.
+            1. **Access the Chatbot**: Launch the Exenatide Chatbot on your device.
+            2. **Start Chatting**: Type your Exenatide-related questions in the chat window. Questions can range from dosage to side effects.
+            3. **Send Your Question**: Submit your query by clicking 'Send' or pressing 'Enter'.
 
             ## Chatting with Exenatide Chatbot 🤔💬
-
-            - **Ask Anything**: Whether it’s detailed drug composition, usage guidelines, storage instructions, or safety precautions, feel free to ask. Example: "What is the recommended dosage of Exenatide for adults?"
-
-            - **Use Simple Language**: For best results, use clear and concise questions. The chatbot is designed to understand everyday language.
-
-            - **Wait for the Response**: Once you submit your question, the chatbot will process it and provide an answer shortly.
-
-            - **Follow-Up Questions**: You can ask follow-up questions or new questions at any time. Just type them into the chat window and send.
+            - **Ask Anything**: Inquiries about drug composition, usage, storage, or safety are all welcome.
+            - **Use Simple Language**: Clear and concise questions yield the best results.
+            - **Wait for the Response**: The chatbot will promptly process and answer your query.
+            - **Follow-Up Questions**: Feel free to ask additional or new questions anytime.
 
             ## Tips for a Better Experience ✨
-
-            - **Be Specific**: The more specific your question, the more accurate the chatbot's response will be.
-
-            - **Check for Typing Errors**: Ensure your question is free from typos to help the chatbot understand you better.
-
-            - **Emoji Use**: Feel free to use emojis in your questions! The chatbot is emoji-friendly. 😊
-
-            - **Patience is Key**: If the chatbot takes a moment to respond, don't worry. It's just processing the best possible answer for you!
+            - **Be Specific**: Specific questions help in getting precise answers.
+            - **Check for Typing Errors**: Correct spelling ensures better understanding by the chatbot.
+            - **Emoji Use**: Emojis are welcome in your questions!
+            - **Patience is Key**: Responses may take a moment as the chatbot processes your query.
 
             ## Support and Feedback 🤝
-
-            - **Experiencing Issues?**: If you face any issues or have technical difficulties, please contact our support team.
-
-            - **We Value Your Feedback**: After using the Exenatide Chatbot, we would love to hear your thoughts. Your feedback helps us improve!
+            - **Need Help?**: Contact our support team for any issues.
+            - **Share Your Feedback**: Your input is valuable and helps us improve.
 
             ## The Team Behind the App 🧑‍💻👩‍💻
+            - **Founders**: Learn about Peter Yin and Yiqiao Yin, the founders, on LinkedIn.
 
-            The Exenatide Chatbot is proudly founded by Peter Yin and Yiqiao Yin. Their dedication and expertise have been instrumental in bringing this innovative solution to life.
-
-            - **Peter Yin**: Get to know more about Peter and his professional journey on [LinkedIn](https://www.linkedin.com/in/peter-yin-7914ba25/).
-
-            - **Yiqiao Yin**: Discover more about Yiqiao's background and accomplishments on [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/).
-
-            Thank you for using the Exenatide Chatbot! We hope it helps you find all the information you need about Exenatide quickly and easily. Happy chatting! 🎉💬
-
+            Thank you for choosing the Exenatide Chatbot. We're here to provide all the information you need about Exenatide efficiently. Happy chatting! 🎉💬
             """
         )
 
+    # File uploader widget allowing users to upload text and PDF documents
     uploaded_files = st.file_uploader(
         "Upload documents", accept_multiple_files=True, type=["txt", "pdf"]
     )
+    # A separator line for visual clarity in the sidebar
     st.write("---")
 
 
+# Check if any files have been uploaded
 if uploaded_files is None:
-    st.info(f"""Upload files to analyse""")
+    # Display a message prompting the user to upload files
+    st.info("Upload files to analyze")
 elif uploaded_files:
-    st.write(str(len(uploaded_files)) + " document(s) loaded..")
+    # Inform the user how many documents have been loaded
+    st.write(f"{len(uploaded_files)} document(s) loaded..")
 
+    # Process the uploaded files to extract text and source information
     textify_output = read_and_textify(uploaded_files)
 
-    documents = textify_output[0]
-    sources = textify_output[1]
+    # Separate the output into documents (text) and their corresponding sources
+    documents, sources = textify_output
 
-    # extract embeddings
+    # Initialize OpenAI embeddings with the API key from Streamlit secrets
     embeddings = OpenAIEmbeddings(openai_api_key=st.secrets["OPENAI_API_KEY"])
 
-    # vstore with metadata. Here we will store page numbers.
+    # Create a Chroma Vector Store with metadata. This store will include page numbers as metadata.
     vStore = Chroma.from_texts(
         documents, embeddings, metadatas=[{"source": s} for s in sources]
     )
 
-    # deciding model
+    # Define the model to use for the language model, here 'gpt-3.5-turbo'
     model_name = "gpt-3.5-turbo"
-    # model_name = "gpt-4"
+    # Alternative model: model_name = "gpt-4"
 
+    # Set up a retriever using the Chroma Vector Store
     retriever = vStore.as_retriever()
-    retriever.search_kwargs = {"k": 2}
+    retriever.search_kwargs = {"k": 2}  # Set the number of documents to retrieve
 
-    # initiate model
+    # Initialize the language model with the specified model name and API key
     llm = OpenAI(
         model_name=model_name,
         openai_api_key=st.secrets["openai_api_key"],
         streaming=True,
     )
 
+    # Set up a retrieval-qa chain using the language model and retriever
     model = RetrievalQAWithSourcesChain.from_chain_type(
         llm=llm, chain_type="stuff", retriever=retriever
     )
 
+    # User interface to ask questions
     st.header("Ask your data")
     user_q = st.text_area("Enter your questions here")
 
+    # Button to get the response from the model
     if st.button("Get Response"):
         try:
+            # Display a spinner while the model is processing the question
             with st.spinner("Model is working on it..."):
+                # Get the response from the model
                 result = model({"question": user_q}, return_only_outputs=True)
                 st.subheader("Your response:")
-                st.write(result["answer"])
+                st.write(result["answer"])  # Display the answer
                 st.subheader("Source pages:")
-                st.write(result["sources"])
+                st.write(result["sources"])  # Display the source pages
         except Exception as e:
+            # Handle exceptions by displaying an error message
             st.error(f"An error occurred: {e}")
             st.error(
                 "Oops, the GPT response resulted in an error :( Please try again with a different question."
