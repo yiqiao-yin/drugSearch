@@ -24,7 +24,6 @@ openai_client = openai.OpenAI()
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
 db = load_vector_db("helpers")
-st.write(type(db))
 
 query = f"User origin question: what is exenatide?"
 st.write(query)
