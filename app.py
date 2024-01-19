@@ -68,6 +68,7 @@ if prompt := st.chat_input("What is up?"):
     references = pd.DataFrame(
         [[docs[i].metadata["source"], docs[i].page_content] for i in range(top_n)]
     )
+    references.columns = ["Source", "Excerpt"]
 
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
