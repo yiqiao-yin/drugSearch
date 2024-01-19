@@ -26,6 +26,7 @@ openai_client = openai.OpenAI()
 db = load_vector_db("vectorstore/*")
 
 query = f"User origin question: what is exenatide?"
+st.write(query)
 docs = db.similarity_search(query)
 st.write(docs)
 
