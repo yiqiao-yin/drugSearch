@@ -139,10 +139,9 @@ elif uploaded_files:
         st.session_state.messages.append({"role": "user", "content": prompt})
 
         result = model({"question": prompt}, return_only_outputs=True)
-        response = result["answer"]
+        response = result["answer"] + "\n Ref:" + result["sources"]
         # Display assistant response in chat message container
         with st.chat_message("assistant"):
             st.markdown(response)
-            st.write(result["sources"])
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": response})
