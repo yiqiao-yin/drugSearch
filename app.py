@@ -25,7 +25,6 @@ openai_client = openai.OpenAI()
 # The `chromadb` variable now holds the Chroma database instance.
 @st.cache_resource(ttl="1h")
 db = load_vector_db("vectorstore")
-st.write(type(db))
 
 query = f"User origin question: what is exenatide?"
 st.write(query)
