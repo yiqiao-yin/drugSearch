@@ -115,21 +115,22 @@ if prompt := st.chat_input("What is up?"):
     response = f"Drug Search🤖💊: {prompt}"
     query = f"User origin question:{prompt}"
     docs = db.similarity_search(query)
-    retrieved_documents = " ".join([docs[i].page_content for i in range(len(docs))])
+    # retrieved_documents = " ".join([docs[i].page_content for i in range(len(docs))])
+    retrieved_documents = " "
     response = rag(query=query, retrieved_documents=retrieved_documents)
 
     # Create reference table
-    references = pd.DataFrame(
-        [[docs[i].metadata["source"], docs[i].page_content] for i in range(len(docs))]
-    )
-    if references.shape[1] >= 2:
-        references.columns = ["Source", "Excerpt"]
+    # references = pd.DataFrame(
+    #     [[docs[i].metadata["source"], docs[i].page_content] for i in range(len(docs))]
+    # )
+    # if references.shape[1] >= 2:
+    #     references.columns = ["Source", "Excerpt"]
 
     # Display the assistant's response in a chat message container labeled as "assistant".
     with st.chat_message("assistant"):
         st.markdown(response)
         st.write("#### Reference")
-        st.write(references)
-        st.write(docs[0])
+        # st.write(references)
+        st.write(docs)
     # Add the assistant's response to the chat history in the session state.
     st.session_state.messages.append({"role": "assistant", "content": response})
