@@ -1,14 +1,13 @@
-import streamlit as st
 import langchain
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
+import PyPDF2
+import streamlit as st
 from langchain import OpenAI, VectorDBQA
 from langchain.chains import RetrievalQAWithSourcesChain
-import PyPDF2
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
 
 from helpers.foundation_models import *
-
 
 st.set_page_config(layout="centered", page_title="Drug Search🤖💊")
 st.header("Drug Search🤖💊")
