@@ -24,7 +24,7 @@ openai_client = openai.OpenAI()
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
 embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-db = Chroma(persist_directory="vectorstore", embedding_function=embedding_function)
+db = Chroma(persist_directory="vectorstore/", embedding_function=embedding_function)
 
 query = f"User origin question: what is exenatide?"
 st.write(query)
