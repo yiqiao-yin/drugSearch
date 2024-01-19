@@ -1,5 +1,7 @@
 import langchain
 import PyPDF2
+import openai
+from openai import OpenAI
 import streamlit as st
 from langchain import OpenAI, VectorDBQA
 from langchain.chains import RetrievalQAWithSourcesChain
@@ -91,25 +93,12 @@ elif uploaded_files:
     retriever.search_kwargs = {"k": 2}  # Set the number of documents to retrieve
 
     # Initialize the language model with the specified model name and API key
-    client = OpenAI(
-        # This is the default and can be omitted
-        api_key=st.secrets["OPENAI_API_KEY"],
-    )
-
-    # Define foundation model via OpenAI API call
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": "Say this is a test",
-            }
-        ],
-        model="gpt-3.5-turbo",
-    )
+    openai.api_key = st.secrets["OPENAI_API_KEY"]
+    openai_client = OpenAI()
 
     # Set up a retrieval-qa chain using the language model and retriever
     model = RetrievalQAWithSourcesChain.from_chain_type(
-        llm=chat_completion, chain_type="stuff", retriever=retriever
+        llm=openai_client, chain_type="stuff", retriever=retriever
     )
 
     # User interface to ask questions
