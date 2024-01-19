@@ -23,8 +23,9 @@ openai_client = openai.OpenAI()
 # involving 'Exenatide', which might be a drug or a medical treatment.
 # Create a Chroma database by calling the `build_chromadb` function with the list of file names.
 # The `chromadb` variable now holds the Chroma database instance.
+path_to_vectordb = "../vectorstore"
 embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
-db = Chroma(persist_directory="vectorstore/", embedding_function=embedding_function)
+db = Chroma(persist_directory=path_to_vectordb, embedding_function=embedding_function)
 
 query = f"User origin question: what is exenatide?"
 st.write(query)
